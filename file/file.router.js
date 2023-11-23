@@ -5,7 +5,7 @@ const {
   listAction,
   removeAction,
   importAction
-} = require('./image.controller.js');
+} = require('./file.controller.js');
 
 router.get('/', listAction);
 router.get('/remove/:id', removeAction);

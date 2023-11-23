@@ -1,26 +1,26 @@
-const imageModel = require('./image.model.js');
-const imageView = require('./image.view.js');
+const fileModel = require('./file.model.js');
+const fileView = require('./file.view.js');
 
 function listAction(request, response) {
-  response.send(imageView.renderList(imageModel.getAll()));
+  response.send(fileView.renderList(fileModel.getAll()));
 }
 
 function removeAction(request, response) {
-  imageModel.remove(request.params.id);
+  fileModel.remove(request.params.id);
   response.redirect(request.baseUrl);
 }
 
 function importAction(request, response) {
   console.log("request.files: %o", request);
-  const image = {
+  const file = {
     id: -1,
     uid: request.body.uid || -1,
     name: request.files.fileinputfield.name,
     size: request.files.fileinputfield.size,
     data: request.files.fileinputfield.data
   };
-  console.log("receiving image %o", image);
-  imageModel.save(image);
+  console.log("receiving file %o", file);
+  fileModel.save(file);
   response.redirect(request.baseUrl);
 }
 
