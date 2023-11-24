@@ -11,7 +11,6 @@ function removeAction(request, response) {
 }
 
 function importAction(request, response) {
-  // const reader = require('xlsx'); 
   const fs = require('fs'); 
 
   // console.log("request.files: %o", request);
@@ -30,20 +29,6 @@ function importAction(request, response) {
       console.log("File written successfully\n");  
     } 
   });
-
-  // const fileParsed = reader.readFile(request.files.fileinputfield.mv());
-  // let data = [];
-  // const sheets = fileParsed.SheetNames;
-  // for(let i = 0; i < sheets.length; i++) 
-  // { 
-  //  const temp = reader.utils.sheet_to_json( 
-  //       file.Sheets[file.SheetNames[i]]) ;
-  //  temp.forEach((res) => { 
-  //     data.push(res) ;
-  //  }) 
-  // }
-  // console.log("receiving file %o", file);
-  // console.log(data);
   fileModel.save(file);
   response.redirect(request.baseUrl);
 }
