@@ -11,7 +11,10 @@ function removeAction(request, response) {
 }
 
 function importAction(request, response) {
-  console.log("request.files: %o", request);
+  // const reader = require('xlsx'); 
+  const fs = require('fs'); 
+
+  // console.log("request.files: %o", request);
   const file = {
     id: -1,
     uid: request.body.uid || -1,
@@ -19,7 +22,28 @@ function importAction(request, response) {
     size: request.files.fileinputfield.size,
     data: request.files.fileinputfield.data
   };
-  console.log("receiving file %o", file);
+
+  fs.writeFile("tempfiles/input.xls",file.data, (err) => { 
+    if (err) 
+      console.log(err); 
+    else { 
+      console.log("File written successfully\n");  
+    } 
+  });
+
+  // const fileParsed = reader.readFile(request.files.fileinputfield.mv());
+  // let data = [];
+  // const sheets = fileParsed.SheetNames;
+  // for(let i = 0; i < sheets.length; i++) 
+  // { 
+  //  const temp = reader.utils.sheet_to_json( 
+  //       file.Sheets[file.SheetNames[i]]) ;
+  //  temp.forEach((res) => { 
+  //     data.push(res) ;
+  //  }) 
+  // }
+  // console.log("receiving file %o", file);
+  // console.log(data);
   fileModel.save(file);
   response.redirect(request.baseUrl);
 }
