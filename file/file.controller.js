@@ -13,6 +13,7 @@ function removeAction(request, response) {
 function importAction(request, response) {
   const fs = require('fs'); 
 
+
   // console.log("request.files: %o", request);
   const file = {
     id: -1,
@@ -29,6 +30,7 @@ function importAction(request, response) {
       console.log("File written successfully\n");  
     } 
   });
+
   fileModel.save(file);
   response.redirect(request.baseUrl);
 }
