@@ -23,13 +23,7 @@ function importAction(request, response) {
     data: request.files.fileinputfield.data
   };
 
-  fs.writeFile("tempfiles/input.xls",file.data, (err) => { 
-    if (err) 
-      console.log(err); 
-    else { 
-      console.log("File written successfully\n");  
-    } 
-  });
+
 
   fileModel.save(file);
   response.redirect(request.baseUrl);
