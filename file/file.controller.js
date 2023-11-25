@@ -36,9 +36,15 @@ function importAction(request, response) {
 
   const firstSheet = excelData[0];
 
-  firstSheet.data.forEach((row, rowIndex) => {
-      console.log(`Row ${rowIndex + 1}:`, row);
-  });
+  const firstColumnData = firstSheet.data.map(row => row ? row[0] : undefined);
+
+  firstColumnData.forEach((cellValue, rowIndex) => {
+    if (cellValue !== undefined) {
+        console.log(`Row ${rowIndex + 1}, Column 1:`, cellValue);
+    } else {
+        console.log(`Row ${rowIndex + 1} is undefined`);
+    }
+});
 
   fileModel.save(file);
   response.redirect(request.baseUrl);
