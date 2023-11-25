@@ -38,9 +38,12 @@ function importAction(request, response) {
 
   const firstColumnData = firstSheet.data.map(row => row ? row[0] : undefined);
 
+  const namen = [];
+
   firstColumnData.forEach((cellValue, rowIndex) => {
     if (cellValue !== undefined) {
         console.log(`Row ${rowIndex + 1}, Column 1:`, cellValue);
+        namen.push(cellValue);
     } else {
         console.log(`Row ${rowIndex + 1} is undefined`);
     }
