@@ -14,6 +14,15 @@ app.use('/file', fileRouter);
 /*
 app.get('/', (request, response) => {
   response.redirect('/movie');
-});*/
+});
+*/
+// Standard Error-Handler
+app.use((error, request, response, next) => {
+if (error.name === 'UnauthorizedError') {
+  response.status(401).send(error);
+} else
+  response.status(500).send(error);
+});
+
 app.use(express.static(__dirname));
 app.listen(8080, ()=>console.log('Server listen on port 8080'));
