@@ -36,9 +36,10 @@ const PASSWORD = 'secret';
 const ALGORITHM = 'HS256';
 function loginAction(request, response) {
   const ur = request.body;
+  console.log(`Getting request from ${ur.na}`)
   fileModel.getUser(ur.na, ur.pw)
     .then(result => {
-      const jwtToken = jwt.sign({ na: result.username, id: result.id }, PASSWORD,
+      const jwtToken = jwt.sign({ na: result.uusername, id: result.uid }, PASSWORD,
         { expiresIn: EXPIRES_IN, algorithm: ALGORITHM });
       response.send({ jwt: jwtToken });
     })
