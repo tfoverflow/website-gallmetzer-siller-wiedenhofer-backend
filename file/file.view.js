@@ -8,7 +8,7 @@ function renderList(files) {
         <td>${file.size}</td>
         <td>${file.uid}</td>
         <td><img src="${file.data}"></td>
-        <td><a href="/movie/remove/${file.id}">Löschen</a></td>
+        <td><a href="/file/remove/${file.id}">Löschen</a></td>
         </tr>`).join('')}
     </table>
   `

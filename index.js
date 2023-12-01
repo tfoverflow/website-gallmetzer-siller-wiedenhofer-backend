@@ -11,11 +11,6 @@ app.use(fileupload());
 const fileRouter = require('./file/file.router.js');
 app.use('/file', fileRouter);
 
-/*
-app.get('/', (request, response) => {
-  response.redirect('/movie');
-});
-*/
 // Standard Error-Handler
 app.use((error, request, response, next) => {
 if (error.name === 'UnauthorizedError') {

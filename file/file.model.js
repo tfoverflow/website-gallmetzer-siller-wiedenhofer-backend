@@ -54,7 +54,7 @@ function save(file) {
     file.id = uuid();
     data.push(file);
   } else {
-    data = data.map(item => item.id === movie.id ? movie : item);
+    data = data.map(item => item.id === file.id ? file : item);
   }
 }
 const crypto = require('crypto');
