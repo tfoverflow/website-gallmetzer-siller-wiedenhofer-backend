@@ -16,7 +16,11 @@ function removeAction(request, response) {
 }
 
 function importAction(request, response) {
-  console.log("request.files: %o", request);
+  const xlsx = require('node-xlsx');
+  const fs = require('fs');
+
+  const filePath = 'tempfiles/input.xls';
+
   const file = {
     id: -1,
     uid: request.body.uid || -1,
@@ -24,8 +28,34 @@ function importAction(request, response) {
     size: request.files.fileinputfield.size,
     data: request.files.fileinputfield.data
   };
-  console.log("receiving file %o", file);
-  fileModel.save(file);
+
+  fs.writeFile(filePath,file.data, (err) => { 
+    if (err) 
+      console.log(err); 
+    else { 
+      // console.log("File written successfully\n");  
+    } 
+  });
+
+  const excelData = xlsx.parse(fs.readFileSync(filePath));
+
+  const firstSheet = excelData[0];
+
+  const firstColumnData = firstSheet.data.map(row => row ? row[0] : undefined);
+
+  const namen = [];
+
+  firstColumnData.forEach((cellValue, rowIndex) => {
+    if (cellValue !== undefined) {
+        // console.log(`Row ${rowIndex + 1}, Column 1:`, cellValue);
+        namen.push(cellValue);
+        file.name = cellValue;
+        console.log(
+          fileModel.save(file));
+    } else {
+        // console.log(`Row ${rowIndex + 1} is undefined`);
+    }
+});
   response.redirect(request.baseUrl);
 }
 // Um JWT erstellen zu können

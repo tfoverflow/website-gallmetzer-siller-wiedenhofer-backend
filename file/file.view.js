@@ -4,7 +4,7 @@ function renderList(files) {
       <tr><th>ID</th><th>Name</th><th>Größe</th><th>BenutzerID</th><th>Bild</th><th>Löschen</th></tr>
       ${files.map(file =>
         `<tr><td>${file.id}</td>
-        <td>${file.name}</td>
+        <td>${namen}</td>
         <td>${file.size}</td>
         <td>${file.uid}</td>
         <td><img src="${file.data}"></td>
