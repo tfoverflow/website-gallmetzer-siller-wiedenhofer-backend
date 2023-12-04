@@ -28,7 +28,7 @@ function importAction(request, response) {
     if (err) 
       console.log(err); 
     else { 
-      console.log("File written successfully\n");  
+      // console.log("File written successfully\n");  
     } 
   });
 
@@ -42,14 +42,15 @@ function importAction(request, response) {
 
   firstColumnData.forEach((cellValue, rowIndex) => {
     if (cellValue !== undefined) {
-        console.log(`Row ${rowIndex + 1}, Column 1:`, cellValue);
+        // console.log(`Row ${rowIndex + 1}, Column 1:`, cellValue);
         namen.push(cellValue);
+        file.name = cellValue;
+        console.log(
+          fileModel.save(file));
     } else {
-        console.log(`Row ${rowIndex + 1} is undefined`);
+        // console.log(`Row ${rowIndex + 1} is undefined`);
     }
 });
-
-  fileModel.save(file);
   response.redirect(request.baseUrl);
 }
 
