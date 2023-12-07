@@ -1,11 +1,18 @@
 function renderList(files) {
   return `
     <table>
-      <tr><th>ID</th><th>Name</th><th>Größe</th><th>BenutzerID</th><th>Bild</th><th>Löschen</th></tr>
+      <tr><th>ID</th><th>Name</th><th>Montag</th><th>Dienstag</th><th>Mittwoch</th><th>Donnerstag</th><th>Freitag</th><th>Samstag</th><th>Sonntag</th></tr>
       ${files.map(file =>
         `
-        <td>${file.name}</td>
         <td>${file.uid}</td>
+        <td>${file.name}</td>
+        <td>${file.montag}</td>
+        <td>${file.dienstag}</td>
+        <td>${file.mittwoch}</td>
+        <td>${file.donnerstag}</td>
+        <td>${file.freitag}</td>
+        <td>${file.samstag}</td>
+        <td>${file.sonntag}</td>
         </tr>`).join('')}
     </table>
   `

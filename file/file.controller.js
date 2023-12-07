@@ -24,6 +24,13 @@ function importAction(request, response) {
   const file = {
     uid: request.body.uid || -1,
     name: request.files.fileinputfield.name,
+    montag: "",
+    dienstag: "",
+    mittwoch: "",
+    donnerstag: "",
+    freitag: "",
+    samstag: "",
+    sonntag: "",
     size: request.files.fileinputfield.size,
     data: request.files.fileinputfield.data
   };
@@ -37,20 +44,25 @@ function importAction(request, response) {
 
   const firstSheet = excelData[0];
 
-  const firstColumnData = firstSheet.data.map(row => row ? row[0] : undefined);
-
-  firstColumnData.forEach((cellValue, rowIndex) => {
-    if (cellValue !== undefined) {
+  firstSheet.data.forEach((row, rowIndex) => {
+    if (rowIndex > 4 && rowIndex < 46) {
         const file1 = {
           uid: rowIndex,
-          name: cellValue,
+          name: row[0] !== undefined ? row[0]: "",
+          montag: row[1] !== undefined ? row[1]: "",
+          dienstag: row[2] !== undefined ? row[2]: "",
+          mittwoch: row[3] !== undefined ? row[3]: "",
+          donnerstag: row[4] !== undefined ? row[4]: "",
+          freitag: row[5] !== undefined ? row[5]: "",
+          samstag: row[6] !== undefined ? row[6]: "",
+          sonntag: row[7] !== undefined ? row[7]: "",
           size: 0,
           data: null
         };
-        file.name = cellValue;
         fileModel.save(file1);
     } 
   });
+
   response.redirect(request.baseUrl);
 }
 // Um JWT erstellen zu können
