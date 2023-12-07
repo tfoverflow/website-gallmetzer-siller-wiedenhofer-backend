@@ -19,10 +19,10 @@ router.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   next();
 });
-router.get('/', expressjwt({ secret: PASSWORD, algorithms: [ ALGORITHM ] }), listAction);
+router.get('/', listAction);
 router.get('/user?', expressjwt({ secret: PASSWORD, algorithms: [ ALGORITHM ] }),   listUserAction);
 router.get('/remove/:id', expressjwt({ secret: PASSWORD, algorithms: [ ALGORITHM ] }), removeAction);
-router.post('/import', expressjwt({ secret: PASSWORD, algorithms: [ ALGORITHM ] }), importAction);
+router.post('/import', importAction);
 router.post('/login', loginAction);
 
 module.exports = router;

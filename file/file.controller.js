@@ -22,9 +22,15 @@ function importAction(request, response) {
   const filePath = 'tempfiles/input.xls';
 
   const file = {
-    id: -1,
     uid: request.body.uid || -1,
     name: request.files.fileinputfield.name,
+    montag: "",
+    dienstag: "",
+    mittwoch: "",
+    donnerstag: "",
+    freitag: "",
+    samstag: "",
+    sonntag: "",
     size: request.files.fileinputfield.size,
     data: request.files.fileinputfield.data
   };
@@ -32,36 +38,37 @@ function importAction(request, response) {
   fs.writeFile(filePath,file.data, (err) => { 
     if (err) 
       console.log(err); 
-    else { 
-      // console.log("File written successfully\n");  
-    } 
   });
 
   const excelData = xlsx.parse(fs.readFileSync(filePath));
 
   const firstSheet = excelData[0];
 
-  const firstColumnData = firstSheet.data.map(row => row ? row[0] : undefined);
+  firstSheet.data.forEach((row, rowIndex) => {
+    if (rowIndex > 4 && rowIndex < 46) {
+        const file1 = {
+          uid: rowIndex,
+          name: row[0] !== undefined ? row[0]: "",
+          montag: row[1] !== undefined ? row[1]: "",
+          dienstag: row[2] !== undefined ? row[2]: "",
+          mittwoch: row[3] !== undefined ? row[3]: "",
+          donnerstag: row[4] !== undefined ? row[4]: "",
+          freitag: row[5] !== undefined ? row[5]: "",
+          samstag: row[6] !== undefined ? row[6]: "",
+          sonntag: row[7] !== undefined ? row[7]: "",
+          size: 0,
+          data: null
+        };
+        fileModel.save(file1);
+    } 
+  });
 
-  const namen = [];
-
-  firstColumnData.forEach((cellValue, rowIndex) => {
-    if (cellValue !== undefined) {
-        // console.log(`Row ${rowIndex + 1}, Column 1:`, cellValue);
-        namen.push(cellValue);
-        file.name = cellValue;
-        console.log(
-          fileModel.save(file));
-    } else {
-        // console.log(`Row ${rowIndex + 1} is undefined`);
-    }
-});
   response.redirect(request.baseUrl);
 }
 // Um JWT erstellen zu können
 const jwt = require('jsonwebtoken');
 // Sekunden der Lebenszeit eines Tokens
-const EXPIRES_IN = 10;
+const EXPIRES_IN = 10000;
 const PASSWORD = 'secret';
 const ALGORITHM = 'HS256';
 function loginAction(request, response) {
