@@ -22,7 +22,6 @@ function importAction(request, response) {
   const filePath = 'tempfiles/input.xls';
 
   const file = {
-    id: -1,
     uid: request.body.uid || -1,
     name: request.files.fileinputfield.name,
     size: request.files.fileinputfield.size,
@@ -32,9 +31,6 @@ function importAction(request, response) {
   fs.writeFile(filePath,file.data, (err) => { 
     if (err) 
       console.log(err); 
-    else { 
-      // console.log("File written successfully\n");  
-    } 
   });
 
   const excelData = xlsx.parse(fs.readFileSync(filePath));
@@ -43,25 +39,24 @@ function importAction(request, response) {
 
   const firstColumnData = firstSheet.data.map(row => row ? row[0] : undefined);
 
-  const namen = [];
-
   firstColumnData.forEach((cellValue, rowIndex) => {
     if (cellValue !== undefined) {
-        // console.log(`Row ${rowIndex + 1}, Column 1:`, cellValue);
-        namen.push(cellValue);
+        const file1 = {
+          uid: rowIndex,
+          name: cellValue,
+          size: 0,
+          data: null
+        };
         file.name = cellValue;
-        console.log(
-          fileModel.save(file));
-    } else {
-        // console.log(`Row ${rowIndex + 1} is undefined`);
-    }
-});
+        fileModel.save(file1);
+    } 
+  });
   response.redirect(request.baseUrl);
 }
 // Um JWT erstellen zu können
 const jwt = require('jsonwebtoken');
 // Sekunden der Lebenszeit eines Tokens
-const EXPIRES_IN = 10;
+const EXPIRES_IN = 10000;
 const PASSWORD = 'secret';
 const ALGORITHM = 'HS256';
 function loginAction(request, response) {

@@ -40,22 +40,20 @@ class Database {
   }
 }
 
+let data = [
+];
+
 function getAll() {
   return data;
 }
-function remove(id) {
-  data = data.filter(file => file.id !== id);
+function remove(uid) {
+  data = data.filter(file => file.uid !== uid);
 }
-function get(id) {
-  return data.find(file => file.id === id);
+function get(uid) {
+  return data.find(file => file.uid === uid);
 }
 function save(file) {
-  if (file.id === '-1') {
-    file.id = uuid();
     data.push(file);
-  } else {
-    data = data.map(item => item.id === file.id ? file : item);
-  }
 }
 const crypto = require('crypto');
 async function getUser(username, password) {
