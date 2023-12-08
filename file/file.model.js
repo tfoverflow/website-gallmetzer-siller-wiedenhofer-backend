@@ -7,6 +7,14 @@ const connectionProperties = {
   database: 'de7rtnl9b2hldxvv'
 };
 
+const pool  = mysql.createPool({
+  connectionLimit : 5,
+  host            : 'ulsq0qqx999wqz84.chr7pe7iynqr.eu-west-1.rds.amazonaws.com',
+  user            : 'g5ec4ljgfr0kwo61',
+  password        : 'mae6mu11wtk59d7k',
+  database        : 'de7rtnl9b2hldxvv'
+});
+
 class Database {
   constructor(connectionProperties) {
     this.connection = mysql.createConnection(connectionProperties);
@@ -52,8 +60,16 @@ function remove(uid) {
 function get(uid) {
   return data.find(file => file.uid === uid);
 }
-function save(file) {
-    data.push(file);
+async function save(file) {
+  const sql=`
+  INSERT INTO mitarbeiter(mname,bid)
+    VALUES ('${file.name}','1')`;
+  pool.query(sql, function(error) {
+    if (error) {
+      return console.log(error);
+    }
+  })
+  data.push(file);
 }
 const crypto = require('crypto');
 async function getUser(username, password) {
