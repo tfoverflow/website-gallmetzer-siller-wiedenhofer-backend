@@ -18,8 +18,8 @@ function removeAction(request, response) {
 function importAction(request, response) {
   const xlsx = require('node-xlsx');
   const fs = require('fs');
-  const { parseISO, format, addDays } = require('date-fns');
-  const { utcToZonedTime, formatInTimeZone } = require('date-fns-tz');
+  const { format, addDays } = require('date-fns');
+  const { utcToZonedTime } = require('date-fns-tz');
 
   const filePath = 'tempfiles/input.xls';
 
@@ -39,22 +39,20 @@ function importAction(request, response) {
 
   const firstSheet = excelData[0];
 
+  const targetTimeZone = 'Europe/Rome';
   let date;
-  let XLSdate;
-  const targetTimeZone = 'Europe/Berlin';
 
   firstSheet.data.forEach((row, rowIndex) => {
     if (rowIndex == 1) {
-      XLSdate = row[6];
+      const XLSdate = row[6];
       const baseDate = new Date('1904-01-01');
       const parsedXLSdate = parseFloat(XLSdate, 10);
       date = addDays(baseDate, parsedXLSdate);
 
-      const zonedDate = utcToZonedTime(date,'Europe/Rome');
+      const zonedDate = utcToZonedTime(date,targetTimeZone);
 
       const formatedDate = format(zonedDate, 'yyyy-MM-dd');
 
-      console.log("date %s",zonedDate);
       console.log("date %s",formatedDate);
     }
     if (rowIndex > 4 && rowIndex < 46) {
