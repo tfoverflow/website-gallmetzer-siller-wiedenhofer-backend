@@ -63,12 +63,20 @@ function get(uid) {
 
 //used to save wochenplaene into DB
 async function saveWoche(file) {
-  // console.log(file.startDatum);
-  // console.log(file.uploadDatum);
+  
+  // insert wochenplan into DB
+  const sql=`
+    INSERT INTO wochenplaene(wwochenstartdatum,wuploaddatum,wexcel)
+      VALUES (?,?,?)`;
+  
+  const values=[file.start,file.upload,file.xlsfile];
+
+  pool.query(sql, values);
 }
 
 async function save(file) {
 
+  // DONT DELETE
   // insert all names in the XLS into the DB
   // const sql=`
   // INSERT INTO mitarbeiter(mname,bid)
@@ -80,8 +88,6 @@ async function save(file) {
   // })
 
   data.push(file);
-  const sql=`
-    INSERT INTO wochenplaene(wwochenstartdatum)`;
 }
 const crypto = require('crypto');
 async function getUser(username, password) {

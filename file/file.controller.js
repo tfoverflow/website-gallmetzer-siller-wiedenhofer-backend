@@ -44,6 +44,7 @@ function importAction(request, response) {
 
   firstSheet.data.forEach((row, rowIndex) => {
     if (rowIndex == 1) {
+      //getting Startdate
       const XLSdate = row[6];
       const baseDate = new Date('1904-01-01');
       const parsedXLSdate = parseFloat(XLSdate, 10);
@@ -53,7 +54,20 @@ function importAction(request, response) {
 
       const formatedDate = format(zonedDate, 'yyyy-MM-dd');
 
-      console.log("date %s",formatedDate);
+      //getting UploadDate
+      const uploadDatum = new Date(Date.now());
+      const formatedUploadDatum = format(uploadDatum, 'yyyy-MM-dd');
+
+      //getting XLS file
+      const XLS = file.data;
+
+      const plan = {
+        start: formatedDate,
+        upload: formatedUploadDatum,
+        xlsfile: XLS
+      }
+
+      fileModel.saveWoche(plan);
     }
     if (rowIndex > 4 && rowIndex < 46) {
         const file1 = {
@@ -72,13 +86,6 @@ function importAction(request, response) {
         fileModel.save(file1);
     } 
   });
-
-  const file2 = {
-    startDatum: date,
-    uploadDatum: Date.now()
-  }
-
-  fileModel.saveWoche(file2);
 
   response.redirect(request.baseUrl);
 }
