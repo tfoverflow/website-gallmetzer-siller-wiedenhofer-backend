@@ -18,19 +18,14 @@ function removeAction(request, response) {
 function importAction(request, response) {
   const xlsx = require('node-xlsx');
   const fs = require('fs');
+  const { parseISO, format, addDays } = require('date-fns');
+  const { utcToZonedTime, formatInTimeZone } = require('date-fns-tz');
 
   const filePath = 'tempfiles/input.xls';
 
   const file = {
     uid: request.body.uid || -1,
     name: request.files.fileinputfield.name,
-    montag: "",
-    dienstag: "",
-    mittwoch: "",
-    donnerstag: "",
-    freitag: "",
-    samstag: "",
-    sonntag: "",
     size: request.files.fileinputfield.size,
     data: request.files.fileinputfield.data
   };
@@ -44,7 +39,24 @@ function importAction(request, response) {
 
   const firstSheet = excelData[0];
 
+  let date;
+  let XLSdate;
+  const targetTimeZone = 'Europe/Berlin';
+
   firstSheet.data.forEach((row, rowIndex) => {
+    if (rowIndex == 1) {
+      XLSdate = row[6];
+      const baseDate = new Date('1904-01-01');
+      const parsedXLSdate = parseFloat(XLSdate, 10);
+      date = addDays(baseDate, parsedXLSdate);
+
+      const zonedDate = utcToZonedTime(date,'Europe/Rome');
+
+      const formatedDate = format(zonedDate, 'yyyy-MM-dd');
+
+      console.log("date %s",zonedDate);
+      console.log("date %s",formatedDate);
+    }
     if (rowIndex > 4 && rowIndex < 46) {
         const file1 = {
           uid: rowIndex,
@@ -62,6 +74,13 @@ function importAction(request, response) {
         fileModel.save(file1);
     } 
   });
+
+  const file2 = {
+    startDatum: date,
+    uploadDatum: Date.now()
+  }
+
+  fileModel.saveWoche(file2);
 
   response.redirect(request.baseUrl);
 }

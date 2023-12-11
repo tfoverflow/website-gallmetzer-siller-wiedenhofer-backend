@@ -60,16 +60,28 @@ function remove(uid) {
 function get(uid) {
   return data.find(file => file.uid === uid);
 }
+
+//used to save wochenplaene into DB
+async function saveWoche(file) {
+  // console.log(file.startDatum);
+  // console.log(file.uploadDatum);
+}
+
 async function save(file) {
-  const sql=`
-  INSERT INTO mitarbeiter(mname,bid)
-    VALUES ('${file.name}','1')`;
-  pool.query(sql, function(error) {
-    if (error) {
-      return console.log(error);
-    }
-  })
+
+  // insert all names in the XLS into the DB
+  // const sql=`
+  // INSERT INTO mitarbeiter(mname,bid)
+  //   VALUES ('${file.name}','1')`;
+  // pool.query(sql, function(error) {
+  //   if (error) {
+  //     return console.log(error);
+  //   }
+  // })
+
   data.push(file);
+  const sql=`
+    INSERT INTO wochenplaene(wwochenstartdatum)`;
 }
 const crypto = require('crypto');
 async function getUser(username, password) {
@@ -94,4 +106,4 @@ async function getUser(username, password) {
     }
   }
 }
-module.exports = { getAll, remove, get, save, getUser };
+module.exports = { getAll, remove, get, saveWoche, save, getUser };
