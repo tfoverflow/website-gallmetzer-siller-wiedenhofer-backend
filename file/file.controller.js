@@ -40,7 +40,7 @@ function importAction(request, response) {
   const firstSheet = excelData[0];
 
   const targetTimeZone = 'Europe/Rome';
-  let date;
+  let formatedDate;
 
   firstSheet.data.forEach((row, rowIndex) => {
     if (rowIndex == 1) {
@@ -52,7 +52,7 @@ function importAction(request, response) {
 
       const zonedDate = utcToZonedTime(date,targetTimeZone);
 
-      const formatedDate = format(zonedDate, 'yyyy-MM-dd');
+      formatedDate = format(zonedDate, 'yyyy-MM-dd');
 
       //getting UploadDate
       const uploadDatum = new Date(Date.now());
@@ -83,7 +83,7 @@ function importAction(request, response) {
           size: 0,
           data: null
         };
-        fileModel.save(file1);
+        fileModel.save(file1,formatedDate);
     } 
   });
 

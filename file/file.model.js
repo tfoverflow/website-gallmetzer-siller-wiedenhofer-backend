@@ -71,10 +71,11 @@ async function saveWoche(file) {
   
   const values=[file.start,file.upload,file.xlsfile];
 
+  // commented because of development purposes
   pool.query(sql, values);
 }
 
-async function save(file) {
+async function save(file,date) {
 
   // DONT DELETE
   // insert all names in the XLS into the DB
@@ -86,6 +87,90 @@ async function save(file) {
   //     return console.log(error);
   //   }
   // })
+
+  // insert data into the DB
+  // getting wid through startdate
+  const sql = `
+  SELECT wid 
+  FROM wochenplaene
+  WHERE wwochenstartdatum = ?`;
+
+const sql1 = `
+  SELECT mid
+  FROM mitarbeiter
+  WHERE mname = ?`;
+
+const sql2 = `
+  INSERT INTO arbeiterwochen(wid,mid,awmontag,awdienstag,awmittwoch,awdonnerstag,awfreitag,awsamstag,awsonntag)
+  VALUES (?,?,?,?,?,?,?,?,?)`;
+
+const values = [file.montag,file.dienstag,file.mittwoch,file.donnerstag,file.freitag,file.samstag,file.sonntag];
+
+let wid, mid;
+
+// Execute the first query to get wid
+const promise1 = new Promise((resolve, reject) => {
+  pool.query(sql, [date], (error, results) => {
+    if (error) {
+      reject(error);
+    } else {
+      console.log(results);
+      wid = results.length > 0 ? results[0].wid : null;
+      console.log('wid:', wid);
+      resolve(wid);
+    }
+  });
+});
+
+const promise2 = promise1.then((wid) => {
+  if (wid === null) {
+    // Handle the case where wid is null, e.g., log an error
+    // console.error('Error: wid iaskjdbasjdhasjkhs null');
+    // console.log(promise1.state)
+    // return Promise.reject('wid isnananananananana null');
+  }
+
+  return new Promise((resolve, reject) => {
+    pool.query(sql1, [file.name], (error, results) => {
+      if (error) {
+        reject(error);
+      } else {
+        mid = results.length > 0 ? results[0].mid : null;
+        resolve({ wid, mid });
+      }
+    });
+  });
+});
+
+Promise.all([promise1, promise2])
+  .then(([wid, { mid }]) => {
+    if (wid == null || mid ==null) {
+      console.error('Error: wid or mid is null');
+      return; // Handle the error appropriately
+    }
+
+    // Perform the insert query with the obtained values
+    pool.query(sql2, [wid, mid, ...values], (error, insertResult) => {
+      if (error) {
+        console.error('Error executing insert query:', error);
+      }
+    });
+  })
+  .catch((error) => {
+    console.error('Promise.all Error:', error);
+  });
+
+promise1.catch((error) => {
+  console.error('Promise 1 Error:', error);
+});
+
+promise2.catch((error) => {
+  console.error('Promise 2 Error:', error);
+});
+
+  
+
+
 
   data.push(file);
 }
