@@ -18,19 +18,14 @@ function removeAction(request, response) {
 function importAction(request, response) {
   const xlsx = require('node-xlsx');
   const fs = require('fs');
+  const { format, addDays } = require('date-fns');
+  const { utcToZonedTime } = require('date-fns-tz');
 
   const filePath = 'tempfiles/input.xls';
 
   const file = {
     uid: request.body.uid || -1,
     name: request.files.fileinputfield.name,
-    montag: "",
-    dienstag: "",
-    mittwoch: "",
-    donnerstag: "",
-    freitag: "",
-    samstag: "",
-    sonntag: "",
     size: request.files.fileinputfield.size,
     data: request.files.fileinputfield.data
   };
@@ -44,7 +39,37 @@ function importAction(request, response) {
 
   const firstSheet = excelData[0];
 
+  const targetTimeZone = 'Europe/Rome';
+  let formatedDate;
+  let plan;
+
   firstSheet.data.forEach((row, rowIndex) => {
+    if (rowIndex == 1) {
+      //getting Startdate
+      const XLSdate = row[6];
+      const baseDate = new Date('1904-01-01');
+      const parsedXLSdate = parseFloat(XLSdate, 10);
+      date = addDays(baseDate, parsedXLSdate);
+
+      const zonedDate = utcToZonedTime(date,targetTimeZone);
+
+      formatedDate = format(zonedDate, 'yyyy-MM-dd');
+
+      //getting UploadDate
+      const uploadDatum = new Date(Date.now());
+      const formatedUploadDatum = format(uploadDatum, 'yyyy-MM-dd');
+
+      //getting XLS file
+      const XLS = file.data;
+
+      plan = {
+        start: formatedDate,
+        upload: formatedUploadDatum,
+        xlsfile: XLS
+      }
+
+      // fileModel.saveWoche(plan);
+    }
     if (rowIndex > 4 && rowIndex < 46) {
         const file1 = {
           uid: rowIndex,
@@ -59,7 +84,7 @@ function importAction(request, response) {
           size: 0,
           data: null
         };
-        fileModel.save(file1);
+        fileModel.save(file1,plan);
     } 
   });
 
