@@ -62,35 +62,34 @@ function get(uid) {
   return data.find((file) => file.uid === uid);
 }
 
-async function save(file, date, plan) {
+async function save(file, plan) {
   try {
-    // console.log(date);
+    // sql Query to insert Wochenplan into DB
     const sqlWeek = `
       INSERT INTO wochenplaene(wwochenstartdatum,wuploaddatum,wexcel)
       VALUES (?,?,?)`;
 
+    // sql Query to get wid from DB
     const sql = `      
       SELECT wid 
       FROM wochenplaene
-      WHERE wwochenstartdatum = '${date}'`;
+      WHERE wwochenstartdatum = '${plan.start}'`;
 
-    // console.log(sql);
-
+    // sql Query to get mid from DB
     const sql1 = `
       SELECT mid
       FROM mitarbeiter
       WHERE mname = ?`;
 
+    // sql Query to insert data into DB
     const sql2 = `
       INSERT INTO arbeiterwochen(wid, mid, awmontag, awdienstag, awmittwoch, awdonnerstag, awfreitag, awsamstag, awsonntag)
       VALUES (?,?,?,?,?,?,?,?,?)`;
 
-    const valuesWeek = [
-      plan.start,
-      plan.upload,
-      plan.xlsfile
-    ];
+    // Values used to insert Wochenplan
+    const valuesWeek = [plan.start, plan.upload, plan.xlsfile];
 
+    // Values used to insert data
     const values = [
       file.montag,
       file.dienstag,
@@ -103,6 +102,7 @@ async function save(file, date, plan) {
 
     let wid = null;
     let mid = null;
+
     // Execute the first query to get wid
     pool.query(sqlWeek, valuesWeek, (errorWeek) => {
       pool.query(sql, (error1, results1) => {
@@ -114,7 +114,6 @@ async function save(file, date, plan) {
         wid = results1.length > 0 ? results1[0].wid : null;
 
         // Execute the second query to get mid
-
         pool.query(sql1, [file.name], (error2, results2) => {
           if (error2) {
             console.error("Error executing query 2:", error2);
@@ -122,16 +121,7 @@ async function save(file, date, plan) {
           }
 
           mid = results2.length > 0 ? results2[0].mid : null;
-          console.log(wid, mid);
 
-          // console.log(pool.query('SELECT mid FROM mitarbeiter WHERE mname = "DRESCHER Roman"'));
-          // mid = rows[0];
-          // console.log(mid);
-
-          // If wid or mid is null, stop execution
-          // if (wid == null || mid == null) {
-          //   return;
-          // }
           // Perform the insert query with the obtained values
           pool.query(sql2, [wid, mid, ...values], (error3) => {
             if (error3) {
@@ -140,7 +130,6 @@ async function save(file, date, plan) {
             }
 
             // If execution reaches here, the insert was successful
-            console.log("Insert successful");
             data.push(file);
           });
         });

@@ -84,7 +84,7 @@ function importAction(request, response) {
           size: 0,
           data: null
         };
-        fileModel.save(file1,formatedDate, plan);
+        fileModel.save(file1,plan);
     } 
   });
 
