@@ -130,7 +130,6 @@ async function save(file, plan) {
             }
 
             // If execution reaches here, the insert was successful
-            data.push(file);
           });
         });
       });
