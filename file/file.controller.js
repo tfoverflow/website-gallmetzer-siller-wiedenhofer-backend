@@ -41,6 +41,7 @@ function importAction(request, response) {
 
   const targetTimeZone = 'Europe/Rome';
   let formatedDate;
+  let plan;
 
   firstSheet.data.forEach((row, rowIndex) => {
     if (rowIndex == 1) {
@@ -61,13 +62,13 @@ function importAction(request, response) {
       //getting XLS file
       const XLS = file.data;
 
-      const plan = {
+      plan = {
         start: formatedDate,
         upload: formatedUploadDatum,
         xlsfile: XLS
       }
 
-      fileModel.saveWoche(plan);
+      // fileModel.saveWoche(plan);
     }
     if (rowIndex > 4 && rowIndex < 46) {
         const file1 = {
@@ -83,7 +84,7 @@ function importAction(request, response) {
           size: 0,
           data: null
         };
-        fileModel.save(file1,formatedDate);
+        fileModel.save(file1,formatedDate, plan);
     } 
   });
 
