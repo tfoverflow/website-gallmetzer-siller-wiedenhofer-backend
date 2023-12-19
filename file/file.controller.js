@@ -108,4 +108,16 @@ function loginAction(request, response) {
     .catch(error => response.status(401).send('unauthorized'));
 }
 
-module.exports = { listAction, listUserAction, removeAction, importAction, loginAction };
+function statistikAction(req, res) {
+  // Call getUserList from the database module
+  fileModel.getUserList((error, result) => {
+    if (error) {
+      // console.log(error);
+      res.status(500).json({ error: error });
+    } else {
+      res.json(result);
+    }
+  });
+}
+
+module.exports = { listAction, listUserAction, removeAction, importAction, loginAction, statistikAction};

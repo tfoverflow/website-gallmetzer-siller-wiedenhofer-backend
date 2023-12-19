@@ -1,6 +1,5 @@
 const mysql = require("mysql");
 
-
 const pool = mysql.createPool({
   connectionLimit: 5,
   host: "ulsq0qqx999wqz84.chr7pe7iynqr.eu-west-1.rds.amazonaws.com",
@@ -8,8 +7,6 @@ const pool = mysql.createPool({
   password: "mae6mu11wtk59d7k",
   database: "de7rtnl9b2hldxvv",
 });
-
-
 
 let data = [];
 
@@ -132,4 +129,22 @@ async function getUser(username, password) {
     });
   }
 }
-module.exports = { getAll, remove, get, save, getUser };
+
+function getUserList(callback) {
+  const sql = `
+    SELECT a.awmontag, a.awdienstag, a.awmittwoch, a.awdonnerstag, a.awfreitag, a.awsamstag, a.awsonntag, m.mname
+    FROM arbeiterwochen a
+    JOIN mitarbeiter m ON a.mid = m.mid`;
+
+  pool.query(sql, (error, result) => {
+    if (error) {
+      console.log("Error in query", error);
+      callback("Database error", null);
+    } else {
+      callback(null, result);
+    }
+  });
+}
+
+
+module.exports = { getAll, remove, get, save, getUser, getUserList };

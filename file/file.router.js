@@ -11,7 +11,8 @@ const {
   listUserAction,
   removeAction,
   importAction,
-  loginAction
+  loginAction,
+  statistikAction
 } = require('./file.controller.js');
 
 router.use(function(req, res, next) {
@@ -24,5 +25,6 @@ router.get('/user?', expressjwt({ secret: PASSWORD, algorithms: [ ALGORITHM ] })
 router.get('/remove/:id', expressjwt({ secret: PASSWORD, algorithms: [ ALGORITHM ] }), removeAction);
 router.post('/import', importAction);
 router.post('/login', loginAction);
+router.get('/statistik', statistikAction);
 
 module.exports = router;
