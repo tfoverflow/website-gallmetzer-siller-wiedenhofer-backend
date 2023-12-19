@@ -132,9 +132,10 @@ async function getUser(username, password) {
 
 function getUserList(callback) {
   const sql = `
-    SELECT a.awmontag, a.awdienstag, a.awmittwoch, a.awdonnerstag, a.awfreitag, a.awsamstag, a.awsonntag, m.mname
+    SELECT a.mid, a.awmontag, a.awdienstag, a.awmittwoch, a.awdonnerstag, a.awfreitag, a.awsamstag, a.awsonntag, m.mname
     FROM arbeiterwochen a
-    JOIN mitarbeiter m ON a.mid = m.mid`;
+    JOIN mitarbeiter m ON a.mid = m.mid
+    ORDER BY m.mid`;
 
   pool.query(sql, (error, result) => {
     if (error) {
