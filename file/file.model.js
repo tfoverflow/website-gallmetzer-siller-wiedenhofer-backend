@@ -222,7 +222,7 @@ FS/Rai Sport
 43*/
   const sql = `
   SELECT
-  m.mname AS name,
+  m.mname AS name, a.mid AS id,
   COUNT(CASE WHEN 'NL' = a.awmontag THEN 1 END) +
   COUNT(CASE WHEN 'NL' = a.awdienstag THEN 1 END) +
   COUNT(CASE WHEN 'NL' = a.awmittwoch THEN 1 END) +
@@ -269,7 +269,7 @@ FS/Rai Sport
   COUNT(CASE WHEN 'W1 (sw)' = a.awdonnerstag THEN 1 END) +
   COUNT(CASE WHEN 'W1 (sw)' = a.awfreitag THEN 1 END) +
   COUNT(CASE WHEN 'W1 (sw)' = a.awsamstag THEN 1 END) +
-  COUNT(CASE WHEN 'W1 (sw)' = a.awsonntag THEN 1 END) AS 'W1(sw)',
+  COUNT(CASE WHEN 'W1 (sw)' = a.awsonntag THEN 1 END) AS 'W1_sw',
   
   COUNT(CASE WHEN 'E/P + PR (RT)' = a.awmontag THEN 1 END) +
   COUNT(CASE WHEN 'E/P + PR (RT)' = a.awdienstag THEN 1 END) +
@@ -277,7 +277,7 @@ FS/Rai Sport
   COUNT(CASE WHEN 'E/P + PR (RT)' = a.awdonnerstag THEN 1 END) +
   COUNT(CASE WHEN 'E/P + PR (RT)' = a.awfreitag THEN 1 END) +
   COUNT(CASE WHEN 'E/P + PR (RT)' = a.awsamstag THEN 1 END) +
-  COUNT(CASE WHEN 'E/P + PR (RT)' = a.awsonntag THEN 1 END) AS 'E/P+PR(RT)',
+  COUNT(CASE WHEN 'E/P + PR (RT)' = a.awsonntag THEN 1 END) AS 'E_P_PR_RT',
   
   COUNT(CASE WHEN 'AF' = a.awmontag THEN 1 END) +
   COUNT(CASE WHEN 'AF' = a.awdienstag THEN 1 END) +
@@ -293,7 +293,7 @@ FS/Rai Sport
   COUNT(CASE WHEN 'B/Lok/C' = a.awdonnerstag THEN 1 END) +
   COUNT(CASE WHEN 'B/Lok/C' = a.awfreitag THEN 1 END) +
   COUNT(CASE WHEN 'B/Lok/C' = a.awsamstag THEN 1 END) +
-  COUNT(CASE WHEN 'B/Lok/C' = a.awsonntag THEN 1 END) AS 'B/Lok/C',
+  COUNT(CASE WHEN 'B/Lok/C' = a.awsonntag THEN 1 END) AS 'B_Lok_C',
   
   COUNT(CASE WHEN 'D/1' = a.awmontag THEN 1 END) +
   COUNT(CASE WHEN 'D/1' = a.awdienstag THEN 1 END) +
@@ -301,7 +301,7 @@ FS/Rai Sport
   COUNT(CASE WHEN 'D/1' = a.awdonnerstag THEN 1 END) +
   COUNT(CASE WHEN 'D/1' = a.awfreitag THEN 1 END) +
   COUNT(CASE WHEN 'D/1' = a.awsamstag THEN 1 END) +
-  COUNT(CASE WHEN 'D/1' = a.awsonntag THEN 1 END) AS 'D/1',
+  COUNT(CASE WHEN 'D/1' = a.awsonntag THEN 1 END) AS 'D_1',
   
   COUNT(CASE WHEN 'D' = a.awmontag THEN 1 END) +
   COUNT(CASE WHEN 'D' = a.awdienstag THEN 1 END) +
@@ -317,7 +317,7 @@ FS/Rai Sport
   COUNT(CASE WHEN 'D/2' = a.awdonnerstag THEN 1 END) +
   COUNT(CASE WHEN 'D/2' = a.awfreitag THEN 1 END) +
   COUNT(CASE WHEN 'D/2' = a.awsamstag THEN 1 END) +
-  COUNT(CASE WHEN 'D/2' = a.awsonntag THEN 1 END) AS 'D/2',
+  COUNT(CASE WHEN 'D/2' = a.awsonntag THEN 1 END) AS 'D_2',
   
   COUNT(CASE WHEN 'F/M' = a.awmontag THEN 1 END) +
   COUNT(CASE WHEN 'F/M' = a.awdienstag THEN 1 END) +
@@ -325,7 +325,7 @@ FS/Rai Sport
   COUNT(CASE WHEN 'F/M' = a.awdonnerstag THEN 1 END) +
   COUNT(CASE WHEN 'F/M' = a.awfreitag THEN 1 END) +
   COUNT(CASE WHEN 'F/M' = a.awsamstag THEN 1 END) +
-  COUNT(CASE WHEN 'F/M' = a.awsonntag THEN 1 END) AS 'F/M',
+  COUNT(CASE WHEN 'F/M' = a.awsonntag THEN 1 END) AS 'F_M',
   
   COUNT(CASE WHEN 'B/D' = a.awmontag THEN 1 END) +
   COUNT(CASE WHEN 'B/D' = a.awdienstag THEN 1 END) +
@@ -333,7 +333,7 @@ FS/Rai Sport
   COUNT(CASE WHEN 'B/D' = a.awdonnerstag THEN 1 END) +
   COUNT(CASE WHEN 'B/D' = a.awfreitag THEN 1 END) +
   COUNT(CASE WHEN 'B/D' = a.awsamstag THEN 1 END) +
-  COUNT(CASE WHEN 'B/D' = a.awsonntag THEN 1 END) AS 'B/D',
+  COUNT(CASE WHEN 'B/D' = a.awsonntag THEN 1 END) AS 'B_D',
   
   COUNT(CASE WHEN 'A/P' = a.awmontag THEN 1 END) +
   COUNT(CASE WHEN 'A/P' = a.awdienstag THEN 1 END) +
@@ -341,7 +341,7 @@ FS/Rai Sport
   COUNT(CASE WHEN 'A/P' = a.awdonnerstag THEN 1 END) +
   COUNT(CASE WHEN 'A/P' = a.awfreitag THEN 1 END) +
   COUNT(CASE WHEN 'A/P' = a.awsamstag THEN 1 END) +
-  COUNT(CASE WHEN 'A/P' = a.awsonntag THEN 1 END) AS 'A/P',
+  COUNT(CASE WHEN 'A/P' = a.awsonntag THEN 1 END) AS 'A_P',
   
   COUNT(CASE WHEN 'A/P M-RIP' = a.awmontag THEN 1 END) +
   COUNT(CASE WHEN 'A/P M-RIP' = a.awdienstag THEN 1 END) +
@@ -349,7 +349,7 @@ FS/Rai Sport
   COUNT(CASE WHEN 'A/P M-RIP' = a.awdonnerstag THEN 1 END) +
   COUNT(CASE WHEN 'A/P M-RIP' = a.awfreitag THEN 1 END) +
   COUNT(CASE WHEN 'A/P M-RIP' = a.awsamstag THEN 1 END) +
-  COUNT(CASE WHEN 'A/P M-RIP' = a.awsonntag THEN 1 END) AS 'A/P M-RIP',
+  COUNT(CASE WHEN 'A/P M-RIP' = a.awsonntag THEN 1 END) AS 'A_P_M_RIP',
   
   COUNT(CASE WHEN 'E/M' = a.awmontag THEN 1 END) +
   COUNT(CASE WHEN 'E/M' = a.awdienstag THEN 1 END) +
@@ -357,7 +357,7 @@ FS/Rai Sport
   COUNT(CASE WHEN 'E/M' = a.awdonnerstag THEN 1 END) +
   COUNT(CASE WHEN 'E/M' = a.awfreitag THEN 1 END) +
   COUNT(CASE WHEN 'E/M' = a.awsamstag THEN 1 END) +
-  COUNT(CASE WHEN 'E/M' = a.awsonntag THEN 1 END) AS 'E/M',
+  COUNT(CASE WHEN 'E/M' = a.awsonntag THEN 1 END) AS 'E_M',
   
   COUNT(CASE WHEN 'E/M M-NL' = a.awmontag THEN 1 END) +
   COUNT(CASE WHEN 'E/M M-NL' = a.awdienstag THEN 1 END) +
@@ -365,7 +365,7 @@ FS/Rai Sport
   COUNT(CASE WHEN 'E/M M-NL' = a.awdonnerstag THEN 1 END) +
   COUNT(CASE WHEN 'E/M M-NL' = a.awfreitag THEN 1 END) +
   COUNT(CASE WHEN 'E/M M-NL' = a.awsamstag THEN 1 END) +
-  COUNT(CASE WHEN 'E/M M-NL' = a.awsonntag THEN 1 END) AS 'E/M M-NL',
+  COUNT(CASE WHEN 'E/M M-NL' = a.awsonntag THEN 1 END) AS 'E_M_M_NL',
   
   COUNT(CASE WHEN 'E/M M-RIP' = a.awmontag THEN 1 END) +
   COUNT(CASE WHEN 'E/M M-RIP' = a.awdienstag THEN 1 END) +
@@ -373,7 +373,7 @@ FS/Rai Sport
   COUNT(CASE WHEN 'E/M M-RIP' = a.awdonnerstag THEN 1 END) +
   COUNT(CASE WHEN 'E/M M-RIP' = a.awfreitag THEN 1 END) +
   COUNT(CASE WHEN 'E/M M-RIP' = a.awsamstag THEN 1 END) +
-  COUNT(CASE WHEN 'E/M M-RIP' = a.awsonntag THEN 1 END) AS 'E/M M-RIP',
+  COUNT(CASE WHEN 'E/M M-RIP' = a.awsonntag THEN 1 END) AS 'E_M_M_RIP',
   
   COUNT(CASE WHEN 'W2 (sw)' = a.awmontag THEN 1 END) +
   COUNT(CASE WHEN 'W2 (sw)' = a.awdienstag THEN 1 END) +
@@ -381,7 +381,7 @@ FS/Rai Sport
   COUNT(CASE WHEN 'W2 (sw)' = a.awdonnerstag THEN 1 END) +
   COUNT(CASE WHEN 'W2 (sw)' = a.awfreitag THEN 1 END) +
   COUNT(CASE WHEN 'W2 (sw)' = a.awsamstag THEN 1 END) +
-  COUNT(CASE WHEN 'W2 (sw)' = a.awsonntag THEN 1 END) AS 'W2 (sw)',
+  COUNT(CASE WHEN 'W2 (sw)' = a.awsonntag THEN 1 END) AS 'W2_sw',
   
   COUNT(CASE WHEN 'W4 (sw)' = a.awmontag THEN 1 END) +
   COUNT(CASE WHEN 'W4 (sw)' = a.awdienstag THEN 1 END) +
@@ -389,7 +389,7 @@ FS/Rai Sport
   COUNT(CASE WHEN 'W4 (sw)' = a.awdonnerstag THEN 1 END) +
   COUNT(CASE WHEN 'W4 (sw)' = a.awfreitag THEN 1 END) +
   COUNT(CASE WHEN 'W4 (sw)' = a.awsamstag THEN 1 END) +
-  COUNT(CASE WHEN 'W4 (sw)' = a.awsonntag THEN 1 END) AS 'W4 (sw)',
+  COUNT(CASE WHEN 'W4 (sw)' = a.awsonntag THEN 1 END) AS 'W4_sw',
   
   COUNT(CASE WHEN 'Fe' = a.awmontag THEN 1 END) +
   COUNT(CASE WHEN 'Fe' = a.awdienstag THEN 1 END) +
@@ -405,7 +405,7 @@ FS/Rai Sport
   COUNT(CASE WHEN 'B/Planung' = a.awdonnerstag THEN 1 END) +
   COUNT(CASE WHEN 'B/Planung' = a.awfreitag THEN 1 END) +
   COUNT(CASE WHEN 'B/Planung' = a.awsamstag THEN 1 END) +
-  COUNT(CASE WHEN 'B/Planung' = a.awsonntag THEN 1 END) AS 'B/Planung',
+  COUNT(CASE WHEN 'B/Planung' = a.awsonntag THEN 1 END) AS 'B_Planung',
   
   COUNT(CASE WHEN 'E/P + PR' = a.awmontag THEN 1 END) +
   COUNT(CASE WHEN 'E/P + PR' = a.awdienstag THEN 1 END) +
@@ -413,7 +413,7 @@ FS/Rai Sport
   COUNT(CASE WHEN 'E/P + PR' = a.awdonnerstag THEN 1 END) +
   COUNT(CASE WHEN 'E/P + PR' = a.awfreitag THEN 1 END) +
   COUNT(CASE WHEN 'E/P + PR' = a.awsamstag THEN 1 END) +
-  COUNT(CASE WHEN 'E/P + PR' = a.awsonntag THEN 1 END) AS 'E/P + PR',
+  COUNT(CASE WHEN 'E/P + PR' = a.awsonntag THEN 1 END) AS 'E_P_PR',
   
   COUNT(CASE WHEN 'B/Spezial' = a.awmontag THEN 1 END) +
   COUNT(CASE WHEN 'B/Spezial' = a.awdienstag THEN 1 END) +
@@ -421,7 +421,7 @@ FS/Rai Sport
   COUNT(CASE WHEN 'B/Spezial' = a.awdonnerstag THEN 1 END) +
   COUNT(CASE WHEN 'B/Spezial' = a.awfreitag THEN 1 END) +
   COUNT(CASE WHEN 'B/Spezial' = a.awsamstag THEN 1 END) +
-  COUNT(CASE WHEN 'B/Spezial' = a.awsonntag THEN 1 END) AS 'B/Spezial',
+  COUNT(CASE WHEN 'B/Spezial' = a.awsonntag THEN 1 END) AS 'B_Spezial',
   
   COUNT(CASE WHEN 'PuC/Vorb.' = a.awmontag THEN 1 END) +
   COUNT(CASE WHEN 'PuC/Vorb.' = a.awdienstag THEN 1 END) +
@@ -429,7 +429,7 @@ FS/Rai Sport
   COUNT(CASE WHEN 'PuC/Vorb.' = a.awdonnerstag THEN 1 END) +
   COUNT(CASE WHEN 'PuC/Vorb.' = a.awfreitag THEN 1 END) +
   COUNT(CASE WHEN 'PuC/Vorb.' = a.awsamstag THEN 1 END) +
-  COUNT(CASE WHEN 'PuC/Vorb.' = a.awsonntag THEN 1 END) AS 'PuC/Vorb.',
+  COUNT(CASE WHEN 'PuC/Vorb.' = a.awsonntag THEN 1 END) AS 'PuC_Vorb',
   
   COUNT(CASE WHEN 'PuC/Mod.' = a.awmontag THEN 1 END) +
   COUNT(CASE WHEN 'PuC/Mod.' = a.awdienstag THEN 1 END) +
@@ -437,7 +437,7 @@ FS/Rai Sport
   COUNT(CASE WHEN 'PuC/Mod.' = a.awdonnerstag THEN 1 END) +
   COUNT(CASE WHEN 'PuC/Mod.' = a.awfreitag THEN 1 END) +
   COUNT(CASE WHEN 'PuC/Mod.' = a.awsamstag THEN 1 END) +
-  COUNT(CASE WHEN 'PuC/Mod.' = a.awsonntag THEN 1 END) AS 'PuC/Mod.',
+  COUNT(CASE WHEN 'PuC/Mod.' = a.awsonntag THEN 1 END) AS 'PuC_Mod',
   
   COUNT(CASE WHEN 'BF' = a.awmontag THEN 1 END) +
   COUNT(CASE WHEN 'BF' = a.awdienstag THEN 1 END) +
@@ -453,7 +453,7 @@ FS/Rai Sport
   COUNT(CASE WHEN 'RO/PT' = a.awdonnerstag THEN 1 END) +
   COUNT(CASE WHEN 'RO/PT' = a.awfreitag THEN 1 END) +
   COUNT(CASE WHEN 'RO/PT' = a.awsamstag THEN 1 END) +
-  COUNT(CASE WHEN 'RO/PT' = a.awsonntag THEN 1 END) AS 'RO/PT',
+  COUNT(CASE WHEN 'RO/PT' = a.awsonntag THEN 1 END) AS 'RO_PT',
   
   COUNT(CASE WHEN 'Rom' = a.awmontag THEN 1 END) +
   COUNT(CASE WHEN 'Rom' = a.awdienstag THEN 1 END) +
@@ -477,7 +477,7 @@ FS/Rai Sport
   COUNT(CASE WHEN 'FS/Rai Sport' = a.awdonnerstag THEN 1 END) +
   COUNT(CASE WHEN 'FS/Rai Sport' = a.awfreitag THEN 1 END) +
   COUNT(CASE WHEN 'FS/Rai Sport' = a.awsamstag THEN 1 END) +
-  COUNT(CASE WHEN 'FS/Rai Sport' = a.awsonntag THEN 1 END) AS 'FS/Rai Sport'
+  COUNT(CASE WHEN 'FS/Rai Sport' = a.awsonntag THEN 1 END) AS 'FS_Rai_Sport'
   
 FROM
   arbeiterwochen a
@@ -500,7 +500,7 @@ ORDER BY
 
 }
 
-function getSpecificList(ID) {
+function getSpecificList(ID, callback) {
   const sql=`
   SELECT
   m.mname AS name,

@@ -120,9 +120,10 @@ function statistikAction(req, res) {
   });
 }
 
-function getUserByID(id) {
+function getUserByID(id, res) {
   fileModel.getSpecificList(id, (error, result) => {
     if (error) {
+      console.log(error);
       res.status(500).json({ error: error});
     } else {
       res.json(result);
