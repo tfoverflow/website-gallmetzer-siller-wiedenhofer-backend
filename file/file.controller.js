@@ -120,4 +120,14 @@ function statistikAction(req, res) {
   });
 }
 
-module.exports = { listAction, listUserAction, removeAction, importAction, loginAction, statistikAction};
+function getUserByID(id) {
+  fileModel.getSpecificList((error, result) => {
+    if (error) {
+      res.status(500).json({ error: error});
+    } else {
+      res.json(result);
+    }
+  });
+}
+
+module.exports = { listAction, listUserAction, removeAction, importAction, loginAction, statistikAction,getUserByID };
