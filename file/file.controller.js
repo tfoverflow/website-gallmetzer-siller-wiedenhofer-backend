@@ -121,7 +121,7 @@ function statistikAction(req, res) {
 }
 
 function getUserByID(id) {
-  fileModel.getSpecificList((error, result) => {
+  fileModel.getSpecificList(id, (error, result) => {
     if (error) {
       res.status(500).json({ error: error});
     } else {
