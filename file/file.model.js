@@ -770,8 +770,6 @@ ORDER BY
   m.mid; 
   `;
 
-  // console.log(sql, "meow", ID);
-
   pool.query(sql, (error, result) => {
     if (error) {
       console.log("Error in query", error);
