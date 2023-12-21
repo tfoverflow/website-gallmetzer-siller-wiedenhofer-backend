@@ -98,7 +98,7 @@ const PASSWORD = 'secret';
 const ALGORITHM = 'HS256';
 function loginAction(request, response) {
   const ur = request.body;
-  console.log(`Getting request from ${ur.na}`)
+  // console.log(`Getting request from ${ur.na}`)
   fileModel.getUser(ur.na, ur.pw)
     .then(result => {
       const jwtToken = jwt.sign({ na: result.uusername, id: result.uid }, PASSWORD,
@@ -120,7 +120,9 @@ function statistikAction(req, res) {
   });
 }
 
-function getUserByID(id, res) {
+function getUserByID(req, res) {
+  const id = req.params.id;
+  console.log(id);
   fileModel.getSpecificList(id, (error, result) => {
     if (error) {
       console.log(error);
