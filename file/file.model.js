@@ -54,91 +54,92 @@ async function save(file, plan) {
     firstName = firstName + file.name[i];
   }
 
+  // console.log("LastName:", lastName);
+  // console.log("FirstName:", firstName);
 
-  console.log("LastName:", lastName);
-  console.log("FirstName:", firstName);
+  // DO NOT DELETE!!!!!!!!!!!!!!!!!!!!!!!!
+  // const sql = `
+  // INSERT INTO mitarbeiter(mname,mfname,bid)
+  // VALUES(?,?,?)`
+  // pool.query(sql, [firstName,lastName,1], error => {
+  //   console.log(error); 
+  // });
 
-  const sql = `
-  INSERT INTO mitarbeiter(mname,mfname,bid)
-  VALUES(?,?,?)`
-  pool.query(sql, [firstName,lastName,1], error => {
-    console.log(error); 
-  });
+  try {
+    // sql Query to insert Wochenplan into DB
+    const sqlWeek = `
+       INSERT INTO wochenplaene(wwochenstartdatum,wuploaddatum,wexcel)
+       VALUES (?,?,?)`;
 
-  // try {
-  //   // sql Query to insert Wochenplan into DB
-  //   const sqlWeek = `
-  //      INSERT INTO wochenplaene(wwochenstartdatum,wuploaddatum,wexcel)
-  //      VALUES (?,?,?)`;
+    // sql Query to get wid from DB
+    const sql = `      
+       SELECT wid 
+       FROM wochenplaene
+       WHERE wwochenstartdatum = '${plan.start}'`;
 
-  //   // sql Query to get wid from DB
-  //   const sql = `      
-  //      SELECT wid 
-  //      FROM wochenplaene
-  //      WHERE wwochenstartdatum = '${plan.start}'`;
+    // sql Query to get mid from DB
+    const sql1 = `
+       SELECT mid
+       FROM mitarbeiter
+       WHERE mname = ? and mfname = ?`;
 
-  //   // sql Query to get mid from DB
-  //   const sql1 = `
-  //      SELECT mid
-  //      FROM mitarbeiter
-  //      WHERE mname = ?`;
+    // sql Query to insert data into DB
+    const sql2 = `
+       INSERT INTO arbeiterwochen(wid, mid, awmontag, awdienstag, awmittwoch, awdonnerstag, awfreitag, awsamstag, awsonntag)
+       VALUES (?,?,?,?,?,?,?,?,?)`;
 
-  //   // sql Query to insert data into DB
-  //   const sql2 = `
-  //      INSERT INTO arbeiterwochen(wid, mid, awmontag, awdienstag, awmittwoch, awdonnerstag, awfreitag, awsamstag, awsonntag)
-  //      VALUES (?,?,?,?,?,?,?,?,?)`;
+    // Values used to insert Wochenplan
+    const valuesWeek = [plan.start, plan.upload, plan.xlsfile];
 
-  //   // Values used to insert Wochenplan
-  //   const valuesWeek = [plan.start, plan.upload, plan.xlsfile];
+    // Values used to insert data
+    const values = [
+      file.montag,
+      file.dienstag,
+      file.mittwoch,
+      file.donnerstag,
+      file.freitag,
+      file.samstag,
+      file.sonntag,
+    ];
 
-  //   // Values used to insert data
-  //   const values = [
-  //     file.montag,
-  //     file.dienstag,
-  //     file.mittwoch,
-  //     file.donnerstag,
-  //     file.freitag,
-  //     file.samstag,
-  //     file.sonntag,
-  //   ];
+    let wid = null;
+    let mid = null;
 
-  //   let wid = null;
-  //   let mid = null;
+    // Execute the first query to get wid
+    pool.query(sqlWeek, valuesWeek, (errorWeek) => {
+      pool.query(sql, (error1, results1) => {
+        if (error1) {
+          console.error("Error executing query 1:", error1);
+          return;
+        }
 
-  //   // Execute the first query to get wid
-  //   pool.query(sqlWeek, valuesWeek, (errorWeek) => {
-  //     pool.query(sql, (error1, results1) => {
-  //       if (error1) {
-  //         console.error("Error executing query 1:", error1);
-  //         return;
-  //       }
+        wid = results1.length > 0 ? results1[0].wid : null;
 
-  //       wid = results1.length > 0 ? results1[0].wid : null;
+        // Execute the second query to get mid
+        pool.query(sql1, [firstName,lastName
+        ], (error2, results2) => {
+          if (error2) {
+            console.error("Error executing query 2:", error2);
+            return;
+          }
 
-  //       // Execute the second query to get mid
-  //       pool.query(sql1, [file.name], (error2, results2) => {
-  //         if (error2) {
-  //           console.error("Error executing query 2:", error2);
-  //           return;
-  //         }
+          mid = results2.length > 0 ? results2[0].mid : null;
 
-  //         mid = results2.length > 0 ? results2[0].mid : null;
+          // Perform the insert query with the obtained values
+          pool.query(sql2, [wid, mid, ...values], (error3) => {
+            if (error3) {
+              console.error("Error executing insert query:", error3);
+              return;
+            }
 
-  //         // Perform the insert query with the obtained values
-  //         pool.query(sql2, [wid, mid, ...values], (error3) => {
-  //           if (error3) {
-  //             console.error("Error executing insert query:", error3);
-  //             return;
-  //           }
-
-  //           // If execution reaches here, the insert was successful
-  //         });
-  //       });
-  //     });
-  //   });
-  // } catch (error) {
-  //   console.error("Error:", error);
-  // }
+            // If execution reaches here, the insert was successful
+          });
+        });
+      });
+    });
+  } catch (error) {
+    console.error("Error:", error);
+  }
 }
 
 const crypto = require("crypto");
